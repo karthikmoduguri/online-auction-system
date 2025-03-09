@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { postauction } from "../utils/DashBoardApi.js";
 const PostAuction = () => {
   const [form, setForm] = useState({ item: "", startingBid: "" });
 
@@ -7,27 +7,21 @@ const PostAuction = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
 
-    if (parseFloat(form.startingBid) < 1) {
-      alert("Starting bid must be at least $1");
+    if (!token) {
+      alert("You must be signed in to post an auction!");
       return;
     }
 
-    let newAuction = {
-      id: Date.now(),
-      item: form.item.trim(),
-      currentBid: parseFloat(form.startingBid),
-      closed: false,
-    };
-
-    let auctions = JSON.parse(localStorage.getItem("auctions")) || [];
-    auctions.push(newAuction);
-    localStorage.setItem("auctions", JSON.stringify(auctions));
-
-    alert("Auction posted successfully!");
-    setForm({ item: "", startingBid: "" }); // Reset form
+    const response = await postauction(form.item, form.startingBid, token);
+    if (response) {
+      alert("Auction posted successfully!");
+    } else {
+      alert("Failed to post auction!");
+    }
   };
 
   return (

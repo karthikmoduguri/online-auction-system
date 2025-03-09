@@ -1,24 +1,41 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Signup = () => {
   const [form, setForm] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    if (users.find((u) => u.username === form.username)) {
-      alert("Username already exists!");
-      return;
+    setError("");
+    try {
+      const user = await axios.post("http://localhost:8000/api/v1/auth/signup", form);
+      if (user) {
+        alert("Signup Successful!");
+        navigate("/signin");
+      } else {
+        alert("Signup failed!");
+      }
+    } catch (error) {
+      console.log(error);
     }
 
-    users.push(form);
-    localStorage.setItem("users", JSON.stringify(users));
-    alert("Signup Successful!");
+    
+    // let users = JSON.parse(localStorage.getItem("users")) || [];
+    // if (users.find((u) => u.username === form.username)) {
+    //   alert("Username already exists!");
+    //   return;
+    // }
+
+    // users.push(form);
+    // localStorage.setItem("users", JSON.stringify(users));
+    // alert("Signup Successful!");
   };
 
   return (

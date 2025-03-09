@@ -16,6 +16,7 @@ const Header = () => {
           <Link className="nav-link text-light fs-5 nav-item-custom" to="/signin">Signin</Link>
           <Link className="nav-link text-light fs-5 nav-item-custom" to="/dashboard">Auction Dashboard</Link>
           <Link className="nav-link text-light fs-5 nav-item-custom" to="/post-auction">Post Auction</Link>
+          <Link className="nav-link text-light fs-5 nav-item-custom" to="/close-auction">close Auction</Link>
         </div>
       </div>
     </nav>

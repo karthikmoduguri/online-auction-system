@@ -1,26 +1,44 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 const Signin = () => {
   const [form, setForm] = useState({ username: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    let users = JSON.parse(localStorage.getItem("users")) || [];
+    setError("");
 
-    let foundUser = users.find((u) => u.username === form.username && u.password === form.password);
-    if (foundUser) {
-      localStorage.setItem("loggedInUser", form.username);
-      alert("Login Successful!");
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+    try {
+      const user = await axios.post("http://localhost:8000/api/v1/auth/signin",form);
+      if(user){
+        alert("Login Successful!");
+        const token = user.data.token;
+        localStorage.setItem("token",token);
+        console.log(token);
+        navigate("/dashboard");
+      }else{
+        alert("Invalid credentials");
+      }
+    } catch (error) {
+      console.log(error);
     }
+
+    // let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // let foundUser = users.find((u) => u.username === form.username && u.password === form.password);
+    // if (foundUser) {
+    //   localStorage.setItem("loggedInUser", form.username);
+    //   alert("Login Successful!");
+    //   navigate("/dashboard");
+    // } else {
+    //   alert("Invalid credentials");
+    // }
   };
 
   return (

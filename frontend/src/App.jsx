@@ -9,7 +9,7 @@ import Signin from './pages/SignIn';
 import Signup from './pages/SignUp';
 import AuctionDashboard from './pages/Dashboard';
 import PostAuction from './pages/PostAuction';
-
+import CloseAuction from './pages/CloseAuction';
 function App() {
 
 
@@ -21,6 +21,7 @@ function App() {
       <Route path="/signin" element={<Signin />} />
       <Route path="/dashboard" element={<AuctionDashboard />} />
       <Route path="/post-auction" element={<PostAuction />} />
+      <Route path="/close-auction" element={<CloseAuction />} />
     </Routes>
     <Footer />
   </Router>
